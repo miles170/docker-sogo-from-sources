@@ -4,6 +4,7 @@
 /etc/my_init.d/memcached-control.sh
 
 # Démarrer SOGo
+touch /var/log/sogo/sogo.log && chown sogo /var/log/sogo/sogo.log
 /etc/service/sogod/run &
 
 # Démarrer Apache

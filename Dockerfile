@@ -1,5 +1,6 @@
 # Use an official base image
-FROM ubuntu
+# SOGO ldap not working when using ubuntu:22.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Paris

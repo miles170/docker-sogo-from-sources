@@ -35,13 +35,14 @@ cp /etc/sogo/sogo.conf /srv/etc/sogo.conf.orig
 
 # Copy back administrator's configuration
 cp /srv/etc/sogo.conf /etc/sogo/sogo.conf
+chown sogo /etc/sogo/sogo.conf
 
 # Create SOGo home directory if missing
 mkdir -p /srv/lib/sogo
 chown -R sogo /srv/lib/sogo
 
 # Copy crontab to /srv as example
-cp /etc/cron.d/sogo /srv/etc/cron.orig
+cp /tmp/SOGo/Scripts/sogo.cron /srv/etc/cron.orig
 
 # Load crontab
 cp /srv/etc/cron /etc/cron.d/sogo
