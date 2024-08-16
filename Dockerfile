@@ -1,5 +1,6 @@
 # Use an official base image
-FROM ubuntu
+ARG UBUNTU_VERSION
+FROM ubuntu:${UBUNTU_VERSION}
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Paris
@@ -7,10 +8,10 @@ ENV TZ=Europe/Paris
 # Install dependencies for the build process
 RUN apt-get update && apt-get install -y curl jq gosu procps apache2 dos2unix memcached libssl-dev gnustep-base-runtime libgnustep-base-dev gettext-base lsb-release gnupg supervisor --no-install-recommends
 
-# Retrieve the latest SOGo version and write it to a file
-RUN curl --silent "https://api.github.com/repos/Alinto/sogo/releases/latest" | \
-    jq -r '.tag_name' | cut -c 6- > /tmp/sogo_version
-RUN cat /tmp/sogo_version | cut -c 1 > /tmp/sogo_maj_version
+# Retrieve the SOGo version and write it to a file
+ARG SOGO_VERSION
+RUN echo "${SOGO_VERSION}" > /tmp/sogo_version && \
+    cat /tmp/sogo_version | cut -c 1 > /tmp/sogo_maj_version
 
 # Install build dependencies and fetch SOGo and SOPE sources
 RUN echo "deb [trusted=yes] http://www.axis.cz/linux/debian $(lsb_release -sc) sogo-v$(cat /tmp/sogo_maj_version)" > /etc/apt/sources.list.d/sogo.list && \

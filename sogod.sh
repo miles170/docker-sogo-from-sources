@@ -118,6 +118,7 @@ fi
 
 # Ensure that the configuration is applied
 cp "$CONFIG_PATH" /etc/sogo/sogo.conf
+chown sogo /etc/sogo/sogo.conf
 
 # Verify that the configuration file is correctly formatted
 if ! grep -q "{" /etc/sogo/sogo.conf || ! grep -q "}" /etc/sogo/sogo.conf; then
