@@ -6,12 +6,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Paris
 
 # Install dependencies for the build process
-RUN apt-get update && apt-get install -y curl jq gosu procps apache2 dos2unix memcached libssl-dev gnustep-base-runtime libgnustep-base-dev gettext-base lsb-release gnupg supervisor --no-install-recommends
+RUN apt-get update && apt-get install -y curl jq gosu procps apache2 dos2unix memcached libssl-dev gnustep-base-runtime libgnustep-base-dev gettext-base lsb-release gnupg supervisor patch --no-install-recommends
 
 # Retrieve the SOGo version and write it to a file
 ARG SOGO_VERSION
 RUN echo "${SOGO_VERSION}" > /tmp/sogo_version && \
     cat /tmp/sogo_version | cut -c 1 > /tmp/sogo_maj_version
+
+COPY sope-5.5.1.patch /tmp/sope-5.5.1.patch
 
 # Install build dependencies and fetch SOGo and SOPE sources
 RUN echo "deb [trusted=yes] http://www.axis.cz/linux/debian $(lsb_release -sc) sogo-v$(cat /tmp/sogo_maj_version)" > /etc/apt/sources.list.d/sogo.list && \
@@ -23,8 +25,9 @@ RUN echo "deb [trusted=yes] http://www.axis.cz/linux/debian $(lsb_release -sc) s
     tar -xf SOGo.tar.gz && \
     mv sope-SOPE-$(cat /tmp/sogo_version) /tmp/SOPE && \
     mv sogo-SOGo-$(cat /tmp/sogo_version) /tmp/SOGo && \
-    cd /tmp/SOPE && ./configure --with-gnustep --enable-debug --disable-strip && make && make install && \
-    cd /tmp/SOGo && ./configure --enable-debug --disable-strip && make && make install
+    cd /tmp/SOPE && patch -p0 < /tmp/sope-5.5.1.patch && ./configure --with-gnustep --enable-debug --disable-strip && make && make install && \
+    cd /tmp/SOGo && ./configure --enable-debug --disable-strip && make && make install && \
+    rm -f /tmp/sope-5.5.1.patch
 
 # Configure Apache, SOGo, and other dependencies
 RUN a2enmod headers proxy proxy_http rewrite ssl && \

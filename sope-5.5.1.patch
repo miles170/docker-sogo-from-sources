@@ -1,0 +1,18 @@
+--- sope-mime/NGMime/NGMimeType.m.orig  2024-08-18 23:39:05.991890031 +0800
++++ sope-mime/NGMime/NGMimeType.m       2024-08-18 23:39:40.164943320 +0800
+@@ -125,13 +125,13 @@
+     encoding = NSKoreanEUCStringEncoding;
+   }
+   else if ([charset isEqualToString:@"big5"]) {
+-    encoding = NSBIG5StringEncoding;
++    encoding = NSBig5StringEncoding;
+   }
+   else if ([charset isEqualToString:@"iso-2022-jp"]) {
+     encoding = NSISO2022JPStringEncoding;
+   }
+   else if ([charset isEqualToString:@"gb2312"]) {
+-    encoding = NSGB2312StringEncoding;
++    encoding = NSChineseEUCStringEncoding;
+   }
+   else if ([charset isEqualToString:@"koi8-r"]) {
+     encoding = NSKOI8RStringEncoding;

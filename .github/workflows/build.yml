@@ -12,12 +12,12 @@ on:
         type: string
         description: Version of SOGo to build
         required: false
-        default: latest
+        default: 5.5.1
       ubuntu-version:
         type: string
         description: Ubuntu version to build
         required: false
-        default: 20.04 # SOGo has serious performance issues on versions after Ubuntu 20.04
+        default: 24.04
 
 jobs:
   build:
