@@ -1,5 +1,5 @@
 # Use an official base image
-ARG UBUNTU_VERSION
+ARG UBUNTU_VERSION=24.04
 FROM ubuntu:${UBUNTU_VERSION}
 
 ENV DEBIAN_FRONTEND=noninteractive
