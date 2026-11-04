@@ -6,17 +6,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Paris
 
 # Install dependencies for the build process
-RUN apt-get update && apt-get install -y curl jq gosu procps apache2 dos2unix memcached libssl-dev gnustep-base-runtime libgnustep-base-dev gettext-base lsb-release gnupg supervisor --no-install-recommends
+RUN apt-get update && apt-get install -y curl jq gosu procps apache2 dos2unix memcached libssl-dev gnustep-base-runtime libgnustep-base-dev gettext-base supervisor --no-install-recommends
 
 # Retrieve the SOGo version and write it to a file
 ARG SOGO_VERSION
-RUN echo "${SOGO_VERSION}" > /tmp/sogo_version && \
-    cat /tmp/sogo_version | cut -c 1 > /tmp/sogo_maj_version
+RUN echo "${SOGO_VERSION}" > /tmp/sogo_version
 
 # Install build dependencies and fetch SOGo and SOPE sources
-RUN echo "deb [trusted=yes] http://www.axis.cz/linux/debian $(lsb_release -sc) sogo-v$(cat /tmp/sogo_maj_version)" > /etc/apt/sources.list.d/sogo.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 608F5293A04BE668 && \
-    apt-get update && apt-get install -y gnustep-make gnustep-base-runtime libgnustep-base-dev pkg-config make gobjc libz-dev zlib1g-dev libpq-dev libmysqlclient-dev libcurl4-openssl-dev libsodium-dev libxml2-dev libssl-dev libldap2-dev libzip-dev mysql-client postgresql-client tmpreaper python3-m2crypto python3-simplejson python3-vobject python3-dateutil postgresql-server-dev-all libmemcached-dev libcurl4-openssl-dev libwbxml2-* tzdata libytnef0 libytnef0-dev --no-install-recommends && \
+RUN apt-get update && apt-get install -y gnustep-make gnustep-base-runtime libgnustep-base-dev pkg-config make gobjc libz-dev zlib1g-dev libpq-dev libmysqlclient-dev libcurl4-openssl-dev libsodium-dev libxml2-dev libssl-dev libldap2-dev libzip-dev mysql-client postgresql-client tmpreaper python3-m2crypto python3-simplejson python3-vobject python3-dateutil postgresql-server-dev-all libmemcached-dev libcurl4-openssl-dev libwbxml2-* tzdata libytnef0 libytnef0-dev --no-install-recommends && \
     curl -L "https://codeload.github.com/Alinto/sope/tar.gz/refs/tags/SOPE-$(cat /tmp/sogo_version)" -o sope.tar.gz && \
     curl -L "https://codeload.github.com/Alinto/sogo/tar.gz/refs/tags/SOGo-$(cat /tmp/sogo_version)" -o SOGo.tar.gz && \
     tar -xf sope.tar.gz && \
